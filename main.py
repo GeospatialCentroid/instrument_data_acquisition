@@ -1,5 +1,12 @@
 import serial
 import serial.tools.list_ports
+
+import time
+
+import datetime
+
+
+
 ports = serial.tools.list_ports.comports()
 working_serials=[]
 for port, desc, hwid in sorted(ports):
@@ -13,8 +20,11 @@ for port, desc, hwid in sorted(ports):
 print ("watching",working_serials)
 while True:
     for i in working_serials:
-        try:
-            value=i.readline()
-            print(str(value))
-        except:
-            pass
+        if i.in_waiting>0:
+            value=i.readline().decode("utf-8").strip()
+            current_time = datetime.datetime.now()
+            print(i.port)
+
+            print(value,current_time)
+
+    time.sleep(1)
