@@ -42,31 +42,45 @@ def root():
     # get the list of instruments and their latest measurement.
     # We should already have this in memory
 
+    html += """<table>
+  <tr>
+    <th>Comport</th>
+    <th>Instrument name</th>
+    <th>Last Transmission</th>
+    <th>Data</th>
+  </tr>"""
+    for i in instrument_manager.instruments:
+        obj=instrument_manager.instruments[i]
+        try:
+            html +=f" <tr><td>{obj.comport}</td><td>{obj.instrument_name}</td><td>{str(obj.last_transmit)}</td><td>{obj.last_data}</td></tr>"
+        except:
+            pass
+
+    html+="</table>"
     return html
 
 
-@app.route("/add_new")
-def add_new():
-    instrument_manager.listen_for_instrument()
+@app.route("/listen_for_new")
+def listen_for_new():
+    instrument_manager.listen_for_new_instruments()
     return "Listening for Instruments"
 
 @app.route("/inject_data")
 def inject_data():
     print(request.args.get('comport'),">>>>>>>")
     instrument_manager.inject_data(request.args.get('comport'),request.args.get('data'))
-    return "Data injected"
+    return "Data injected -" +request.args.get('comport')+" for:"+request.args.get('data')
 
-@app.route("/reload_configs")
-def reload_configs():
-    # todo when a change is made to a config file
-    # restarting app will reload the configs
-    return "reload_configs..."
+@app.route("/add_new")
+def add_new():
+    comport = instrument_manager.add_new(request.args.get('filename'))
+    return "Now watching instrument "+comport
 
 def init():
     instrument_manager.load_configs()
 
 if __name__ == '__main__':
-
+    # create a single thread to maintain access to the instrument manager
     thread = threading.Thread(target=init)
     thread.start()
     app.run(host='0.0.0.0', port=5001, debug=False)
