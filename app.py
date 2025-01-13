@@ -4,7 +4,9 @@
 File: add_new_instrument.py
 Author: KEvin Worthington
 Date: 2024-12-16
-Description: The app is launched a web server is started allowing interactivity with the InstrumentManager
+Description: The app launches a web server allowing interactivity with the InstrumentManager
+The InstrumentManager looks for instruments which are transmitting data and stores these data transmissions.
+Each instrument requires a configuration file and the InstrumentManager can prepopulate a template file.
 
 
 Run with
@@ -23,7 +25,7 @@ import InstrumentManager
 app = Flask(__name__)
 
 
-# create data folder if it doesn't exists
+# create data folder if it doesn't exist
 data_folder= "data"
 if not os.path.exists(data_folder):
    os.makedirs(data_folder)
@@ -38,7 +40,7 @@ instrument_manager = InstrumentManager.InstrumentManager(data_folder=data_folder
 @app.route("/")
 def root():
     print("Preparing measurement table")
-    html="Measuring Instrument Table"
+    html="<h1>Measuring Instrument Table</h1>"
     # get the list of instruments and their latest measurement.
     # We should already have this in memory
 

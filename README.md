@@ -31,7 +31,8 @@ This application can be interacted with from either your web browser, or using t
 
 ### Create a new instrument configuration
 For this program to be useful, you first need to add instruments to be 'watched'.
-With a new instrument connected, and running, go to http://127.0.0.1:5001/listen_for_new.
+With a new instrument connected, and running, go to http://127.0.0.1:5001/listen_for_new
+
 This will trigger the program to look for any instruments that are transmitting data but not yet being 'watched'.
 When the new instrument first starts transmitting, a config file is created.
 
@@ -47,17 +48,30 @@ The .yml files have been designed for readability but formatting is still strict
 
 Each line is a new 'key: value' pair.
 
-Be sure there's a space after the ':' to avoid errors
+Note: Be sure there's a space after the ':' to avoid errors
+
+#### Config File options
+* comport: The name of the comport the instrument is connected to. Do not change this unless you plan on changing the comport the instrument is connected to
+* instrument_name: The name of the instrument for use on web pages and print statements
+* instrument_filename: The prefix you'd like added to each of your files. this will be appended with _YYYY-MM-DD
+* instrument_folder: The name of the folder for the instrument data
+* data_folder: The folder for all the instrument's. Best to leave this as "data"
+* sample_line: When an instrument is first noticed to be transmitting data, this sample data line will appear here
+* header: When a new data file is created, this header line is added. Each line of data is also appended with a "utc_datetime", and "warm" value
+  * utc_datetime or Universal Time Coordinated (UTC), is equivalent to the time at the Greenwich Meridian in London, England, without adjustment for daylight savings
+* warm_up_seconds: The number of seconds it take for the instrument to warm up. This number is subtracted from using the time data is transmitted
+* interval: When the interval number is exceeded between data transmissions, the warmup clock resets
+* baudrate: Determined by the instrument manufacturer. Adjust based on instrument manual.
 
 ##### Add new configuration
-With the new instrument configuration file updated, go to http://127.0.0.1:5001/add_new?filename={filename}, replacing '{filename}' with the name of the file in the config folder.
+With the new instrument configuration file updated, and while the app is still running, go to http://127.0.0.1:5001/add_new?filename={filename}, replacing '{filename}' with the name of the file in the config folder.
 
 ## Get Latest Instrument Measurements
 While the app is running, go to http://127.0.0.1:5001/ to see a table of instruments being 'watched' and their last transmission
 
 ## Testing
 Once you have a config file, you can test how data is saved using the following:
-http://127.0.0.1:5001/inject_data?comport=/dev/cu.Bluetooth-Incoming-Port&data=12.0,26.5,826.6,1836,05/12/24,16:01:392024-12-0516:01:16.699350
+http://127.0.0.1:5001/inject_data?comport={comport}&data=12.0,26.5,826.6,1836,05/12/24,16:01:392024-12-0516:01:16.699350, replacing '{comport}' with the name of the comport you are testing
 
 
 

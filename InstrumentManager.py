@@ -39,7 +39,7 @@ class InstrumentManager:
     if hasattr(self, "watcher_thread"):
       self.watcher_thread.kill()
 
-    # create a thread that watches for new instruments tranmitting data
+    # create a thread that watches for new instruments transmitting data
     self.watcher_thread = threading.Thread(target=watch_port_function, args=(self,comports))
     self.watcher_thread.daemon = True  # Make the thread a daemon so it exits when the main thread exits
     self.watcher_thread.start()
@@ -75,7 +75,7 @@ class InstrumentManager:
       "instrument_folder": "",
       "data_folder": "data",
       "sample_line": data,
-      "header": "ozone,temperature,pressure,flow,date,time,warm",
+      "header": "ozone,temperature,pressure,flow,date,time,utc_datetime,warm",
       "warm_up_seconds": 600,
       "interval": 20,# When the interval is exceeded the warmup clock resets.
       "baudrate": 2400 # Adjust baudrate as needed
@@ -129,7 +129,7 @@ class InstrumentManager:
       thread.start()
       self.threads.append(thread)
     except serial.SerialException:
-      print(f"Error: Could not open port {port_name}")
+      print(f"Error: Could not open port {comport}")
 
   def inject_data(self,comport, data):
     #for testing the app
