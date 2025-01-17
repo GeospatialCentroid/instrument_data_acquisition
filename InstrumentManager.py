@@ -26,7 +26,7 @@ class InstrumentManager:
     comports = []
     for port, desc, hwid in sorted(ports):
       try:
-        ser = serial.Serial(port=port, baudrate=2400)
+        ser = serial.Serial(port=port, baudrate=57600)#2400.19200
         # check if the port already has a config
         if  port not in self.instruments:
           print("{}: {} [{}]".format(port, desc, hwid), "Could have data")
@@ -37,7 +37,10 @@ class InstrumentManager:
 
     # kill existing thread if it exists
     if hasattr(self, "watcher_thread"):
-      self.watcher_thread.kill()
+      try:
+        self.watcher_thread.kill()
+      except Exception as e:
+        print("tried to kill", self.watcher_thread,e)
 
     # create a thread that watches for new instruments transmitting data
     self.watcher_thread = threading.Thread(target=watch_port_function, args=(self,comports))
@@ -49,19 +52,22 @@ class InstrumentManager:
     while waiting:
       print("watching...")
       for i in _comports:
-        try:
-          if i.in_waiting > 0:
+        # try:
+        print("checking", i.port,i.in_waiting)
+        if i.in_waiting > 0:
+          data = i.readline()
+          try:
             data = i.readline().decode("utf-8").strip()
-            current_time = datetime.datetime.now()
-            print(i.port)
-
-            print(data, current_time)
-            self.create_new_instrument_config(i.port,data)
-            waiting=False
-        except Exception as e:
-          print("except",e)
-          self.create_new_instrument_config(i.port, "")
-          waiting = False
+          except Exception as e:
+            pass
+          current_time = datetime.datetime.now()
+          print(data, current_time)
+          self.create_new_instrument_config(i.port,data)
+          waiting=False
+        # except Exception as e:
+        #   print("except",e)
+        #   self.create_new_instrument_config(i.port, "")
+        #   waiting = False
 
       time.sleep(1)
 
@@ -123,7 +129,7 @@ class InstrumentManager:
     # use 'obj' to more easily access each instrument object
     obj = self.instruments[comport]
     try:
-      port_obj = serial.Serial(obj.comport, obj.baudrate, timeout=1)  #
+      port_obj = serial.Serial(obj.comport, obj.baudrate)  #
       thread = threading.Thread(target=read_from_port_function, args=(obj, port_obj))
       thread.daemon = True
       thread.start()

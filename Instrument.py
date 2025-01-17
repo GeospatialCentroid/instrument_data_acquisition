@@ -12,8 +12,11 @@ class Instrument:
     while True:
       try:
         if port_obj.in_waiting > 0:
-          data = port_obj.readline().decode().strip()
-          #print(f"Data from {self.instrument_name}: {data}")
+          try:
+            data = port_obj.readline().decode("utf-8").strip()
+          except Exception as e:
+            pass
+          # print(f"Data from {self.instrument_name}: {data}")
           self.store_instrument_data(self.instrument_folder, self.instrument_filename,data, datetime.datetime.now(datetime.timezone.utc))
       except Exception as e:
          print(self.instrument_name,e)
@@ -23,7 +26,15 @@ class Instrument:
 
     # first check if the data has at least once comma before continuing
     if "," not in data:
-      return
+      # check that the length is greater than 15 characters
+      if len(data)<25:
+        print(" data less than 15")
+        return
+      elif "    " in data:
+        # replace 4 spaces with a comma
+        data = data.replace("    ", ",")
+      elif len(data.split(" ")) :
+        data = data.replace(" ", ",")
 
     instrument_file = file_name + "_" + str(datetime.date())
 

@@ -50,11 +50,12 @@ def root():
     <th>Instrument name</th>
     <th>Last Transmission</th>
     <th>Data</th>
+    <th>File header</th>
   </tr>"""
     for i in instrument_manager.instruments:
         obj=instrument_manager.instruments[i]
         try:
-            html +=f" <tr><td>{obj.comport}</td><td>{obj.instrument_name}</td><td>{str(obj.last_transmit)}</td><td>{obj.last_data}</td></tr>"
+            html +=f" <tr><td>{obj.comport}</td><td>{obj.instrument_name}</td><td>{str(obj.last_transmit)}</td><td>{obj.last_data}</td><td>{obj.header}</td></tr>"
         except:
             pass
 
