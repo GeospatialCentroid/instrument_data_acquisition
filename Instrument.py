@@ -31,8 +31,8 @@ class Instrument:
         print(" data less than 15")
         return
       elif "    " in data:
-        # replaces any number of spaces up to 4 with a comma, starting with greatest number of spaces
-        for sep in ["    ", "   ", "  ", " "]:
+        # replaces any number of spaces up to 5 with a comma, starting with greatest number of spaces
+        for sep in ["     ", "    ", "   ", "  ", " "]:
           data = data.replace(sep, ",")
       elif len(data.split(" ")) :
         data = data.replace(" ", ",")
