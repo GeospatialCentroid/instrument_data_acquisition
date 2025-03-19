@@ -65,7 +65,7 @@ def root():
 
 @app.route("/listen_for_new")
 def listen_for_new():
-    instrument_manager.listen_for_new_instruments()
+    instrument_manager.listen_for_new_instruments(request.args.get('baudrate'))
     return "Listening for Instruments"
 
 @app.route("/inject_data")

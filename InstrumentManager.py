@@ -19,14 +19,14 @@ class InstrumentManager:
     self.threads = []
 
 
-  def listen_for_new_instruments(self):
+  def listen_for_new_instruments(self,baudrate):
     print("Listen for new instruments")
     # Watch all comports to see if one is transmitting data but not saving it
     ports = serial.tools.list_ports.comports()
     comports = []
     for port, desc, hwid in sorted(ports):
       try:
-        ser = serial.Serial(port=port, baudrate=57600)#2400.19200
+        ser = serial.Serial(port=port, baudrate=int(baudrate))#2400,19200,57600
         # check if the port already has a config
         if  port not in self.instruments:
           print("{}: {} [{}]".format(port, desc, hwid), "Could have data")

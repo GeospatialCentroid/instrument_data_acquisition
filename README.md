@@ -31,7 +31,8 @@ This application can be interacted with from either your web browser, or using t
 
 ### Create a new instrument configuration
 For this program to be useful, you first need to add instruments to be 'watched'.
-With a new instrument connected, and running, go to http://127.0.0.1:5001/listen_for_new
+With a new instrument connected, and running, go to http://127.0.0.1:5001/listen_for_new?baudrate=2400
+Replacing the baud rate number (2400) to whatever your new instrument uses.
 
 This will trigger the program to look for any instruments that are transmitting data but not yet being 'watched'.
 When the new instrument first starts transmitting, a config file is created.
