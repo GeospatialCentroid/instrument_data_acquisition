@@ -94,7 +94,7 @@ def main():
                 print(f"[{datetime.now()}] CSV has fewer than 2 lines, skipping...")
             else:
                 header = lines[0]         # First line is header
-                second_line = lines[1]    # Second line is the desired data row
+                second_line = lines[-1]    # last line is the desired data row
                 save_to_daily_file(header, second_line, current_date, args.folder, args.prefix)
                 print(f"[{datetime.now()}] Appended data to {args.prefix}_{current_date}.csv")
 
