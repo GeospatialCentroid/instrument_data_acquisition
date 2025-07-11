@@ -91,3 +91,32 @@ The steps to update ```fstab``` are:
 1. run  ```sudo nano /etc/fstab```
 1. add ```UUID=5fcfba13-288b-4c55-a215-19ae047cf365  /media/theremin/data  auto  defaults  0  2``` and update the UUID
 1. Lastly, run ```sudo mkdir -p /media/theremin/data``` to make sure the directory is persistent
+
+## Daemon
+To make it easier to run the watcher.py file, a daemon (sudo nano /etc/systemd/system/instrument_data_acquisition.service)  has been created on the instrument computer.
+This file contains:
+```
+[Unit]
+Description=Python Instrument Data Acquisition Daemon
+After=network.target
+
+[Service]
+ExecStart=/home/theremin/projects/instrument_data_acquisition/app.sh
+WorkingDirectory=/home/theremin/projects/instrument_data_acquisition
+Restart=always
+User=theremin
+Environment=PYTHONUNBUFFERED=1
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+```
+Common commands include:
+
+
+```
+sudo systemctl enable instrument_data_acquisition.service
+sudo systemctl start instrument_data_acquisition.service
+systemctl status instrument_data_acquisition.service
+```
