@@ -8,7 +8,7 @@ OpenAI. (2025). ChatGPT (June 10th version) [Large language model]. https://chat
 
 Running as a daemon
 
-sudo nano /etc/systemd/system/csv_monitor.service
+sudo nano /etc/systemd/system/download_remote_data.service
 
 [Unit]
 Description=Download Remote Data Daemon
@@ -18,12 +18,12 @@ After=network.target
 Type=simple
 ExecStart=/usr/bin/python3 /home/theremin/projects/instrument_data_acquisition/download_remote_data.py \
     --url https://coagmet.colostate.edu/data/latest/den01.csv?header=yes&dateFmt=iso&tz=utc&units=m&fields=t,rh,dewpt,vp,bp_avg,solarRad,rso,precip,wetb,dt,windSpeed,windDir,gustSpeed,gustDir \
-    --folder /den01 \
+    --folder /media/theremin/data/den01 \
     --prefix den01 \
     --interval  900
 Restart=always
-User=instrument
-WorkingDirectory=/home/instrument/instrument_data_acquisition
+User=theremin
+WorkingDirectory=/home/theremin/projects/instrument_data_acquisition
 StandardOutput=journal
 StandardError=journal
 
@@ -40,6 +40,9 @@ sudo systemctl start download_remote_data.service
 # check status
 systemctl status download_remote_data.service
 
+
+OR running from the commandline
+/usr/bin/python3 /home/theremin/projects/instrument_data_acquisition/download_remote_data.py --url "https://coagmet.colostate.edu/data/latest/den01.csv?header=yes&dateFmt=iso&tz=utc&units=m&fields=t,rh,dewpt,vp,bp_avg,solarRad,rso,precip,wetb,dt,windSpeed,windDir,gustSpeed,gustDir" --folder /home/theremin/projects/den01 --prefix den01 --interval 900
 '''
 
 

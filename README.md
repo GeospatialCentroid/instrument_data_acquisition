@@ -76,3 +76,18 @@ http://127.0.0.1:5001/inject_data?comport={comport}&data=12.0,26.5,826.6,1836,05
 
 
 
+## Accessing file on a remote computer over SSH
+1. Open the terminal - if you're using NinjaOne - navigate to https://csuspur.rmmservice.com/eus/#/devices and click the >_ icon
+   1. Otherwise: To SSH into the computer enter the {remote computer user}@{IP address}
+1. Change the directory to where your files are located ```cd {file location dir}```
+1. type ```nano {name of file}``` to open or use ```tail -f {name of file}``` to see real-time updates to a file.
+
+
+## Storing data on a mounted drive
+To allow the data to be stored on a separate drive (preferably one that is set up using RAID),
+be sure the mounted drive is added to the ```fstab``` listing to ensure it gets remounted when the computer reboots.
+The steps to update ```fstab``` are:
+1. run ```lsblk -f``` and take note of the UUID for the mounted drive
+1. run  ```sudo nano /etc/fstab```
+1. add ```UUID=5fcfba13-288b-4c55-a215-19ae047cf365  /media/theremin/data  auto  defaults  0  2``` and update the UUID
+1. Lastly, run ```sudo mkdir -p /media/theremin/data``` to make sure the directory is persistent
