@@ -50,7 +50,7 @@ import requests
 import csv
 import time
 import argparse
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Fetch CSV content from the provided URL and return the lines
@@ -87,23 +87,23 @@ def main():
     # Start the infinite loop to check every interval
     while True:
         try:
-            current_date = datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")  # Format today's date
+            current_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")  # Format today's date
             csv_lines = get_csv_lines(args.url)  # Fetch and read CSV
             reader = csv.reader(csv_lines)
             lines = list(reader)
 
             # Ensure there is at least a header and one data line
             if len(lines) < 2:
-                print(f"[{datetime.now(datetime.timezone.utc)}] CSV has fewer than 2 lines, skipping...")
+                print(f"[{datetime.now(timezone.utc)}] CSV has fewer than 2 lines, skipping...")
             else:
                 header = lines[0]         # First line is header
                 second_line = lines[-1]    # last line is the desired data row
                 save_to_daily_file(header, second_line, current_date, args.folder, args.prefix)
-                print(f"[{datetime.now(datetime.timezone.utc)}] Appended data to {args.prefix}_{current_date}.csv")
+                print(f"[{datetime.now(timezone.utc)}] Appended data to {args.prefix}_{current_date}.csv")
 
         except Exception as e:
             # Handle and log any error without crashing the script
-            print(f"[{datetime.now(datetime.timezone.utc)}] Error: {e}")
+            print(f"[{datetime.now(timezone.utc)}] Error: {e}")
 
         time.sleep(args.interval)  # Wait for the specified interval before repeating
 
