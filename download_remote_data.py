@@ -64,6 +64,21 @@ def save_to_daily_file(header, data_line, date_str, folder, prefix):
     filename = Path(folder) / f"{prefix}_{date_str}.csv"  # e.g., ./folder/prefix_2025-06-10.csv
     file_exists = filename.exists()  # Check if file already exists
 
+    last_line = None
+
+    # If file exists, read the last line
+    if file_exists:
+        with filename.open('r', newline='') as f:
+            try:
+                last_line = list(csv.reader(f))[-1]
+            except IndexError:
+                last_line = None  # File exists but empty
+
+    # Compare last line with new data
+    if last_line == data_line:
+        print(f"[{datetime.now(timezone.utc)}] Skipping duplicate row")
+        return  # Do NOT write anything
+
     # Open the file in append mode, creating it if necessary
     with filename.open('a', newline='') as f:
         writer = csv.writer(f)
