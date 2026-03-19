@@ -25,7 +25,7 @@ import requests
 import sys
 
 
-BASE_URL = "https://coagmet.colostate.edu/data/5min.csv"
+BASE_URL = "https://coagmet.colostate.edu/data/5min/den01.csv"
 
 FIELDS = "t,rh,dewpt,vp,bp_avg,solarRad,rso,precip,wetb,dt,windSpeed,windDir,gustSpeed,gustDir"
 
