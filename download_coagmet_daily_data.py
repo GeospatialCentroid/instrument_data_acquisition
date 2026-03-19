@@ -43,7 +43,7 @@ def fetch_day(date, folder, prefix):
         "header": "yes",
         "from": from_str,
         "to": to_str,
-        "dateFmt":iso,
+        "dateFmt":"iso",
         "tz": "utc",
         "units": "m",
         "fields": FIELDS,
