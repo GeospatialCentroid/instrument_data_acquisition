@@ -33,6 +33,7 @@ FIELDS = "t,rh,dewpt,vp,bp_avg,solarRad,rso,precip,wetb,dt,windSpeed,windDir,gus
 def fetch_day(date, folder, prefix):
     """
     Fetch data for a single day and save to CSV.
+    Removes second header row (units) if present.
     """
     next_day = date + timedelta(days=1)
 
@@ -43,7 +44,7 @@ def fetch_day(date, folder, prefix):
         "header": "yes",
         "from": from_str,
         "to": to_str,
-        "dateFmt":"iso",
+        "dateFmt": "iso",
         "tz": "utc",
         "units": "m",
         "fields": FIELDS,
@@ -55,8 +56,22 @@ def fetch_day(date, folder, prefix):
         response = requests.get(BASE_URL, params=params, timeout=30)
         response.raise_for_status()
 
+        lines = response.text.splitlines()
+
+        # 🔍 Detect and remove second header row (units row)
+        if len(lines) > 1:
+            second_line = lines[1].lower()
+
+            # Heuristic: units row contains measurement units
+            unit_indicators = ["deg", "%", "kpa", "m/s", "w m-2", "mm", "hpa"]
+
+            if any(unit in second_line for unit in unit_indicators):
+                print(f"Removing units row for {from_str}")
+                lines.pop(1)
+
+        # Write cleaned file
         with open(filename, "w") as f:
-            f.write(response.text)
+            f.write("\n".join(lines) + "\n")
 
         print(f"Saved: {filename}")
 
