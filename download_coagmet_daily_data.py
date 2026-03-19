@@ -15,7 +15,7 @@ Example:
         --end 2026-03-05 \
         --folder /home/theremin/projects/den01 \
         --prefix den01
-        
+
 """
 
 import argparse
@@ -43,6 +43,7 @@ def fetch_day(date, folder, prefix):
         "header": "yes",
         "from": from_str,
         "to": to_str,
+        "dateFmt":iso,
         "tz": "utc",
         "units": "m",
         "fields": FIELDS,
